@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+
+    <title>LUT to KTX2 texture</title>
+
+    <link rel="canonical" href="https://lut-to-texture.glitch.me/" />
+    <meta
+      name="description"
+      content="Converts 1D and 3D LUTs to GPU-supported textures in KTX 2.0 format."
+    />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content="LUT to KTX2 texture converter" />
+    <meta property="og:url" content="https://lut-to-texture.glitch.me/" />
+    <meta
+      property="og:description"
+      content="Converts 1D and 3D LUTs to GPU-supported textures in KTX 2.0 format."
+    />
+    <meta name="twitter:card" content="summary" />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/@popperjs/core@2" defer></script>
+    <script src="https://unpkg.com/tippy.js@6" defer></script>
+    <script type="module" src="/script.js" defer></script>
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <main class="content" role="main">
+        <h1 class="title">LUT to KTX2 texture</h1>
+
+        <section class="dropzone">
+          <section class="dropzone-prompt">
+            <h3>Drop LUT file(s) here</h3>
+            <p>
+              <em>Accepts 1D and 3D LUTs in ".cube" format.</em>
+            </p>
+          </section>
+          <section class="dropzone-results">
+            <h3>Inputs</h3>
+            <ol class="inputs"></ol>
+            <h3>Outputs</h3>
+            <ol class="outputs"></ol>
+          </section>
+        </section>
+        <form>
+          <label data-tippy-content="Precision of output values in the lookup table. 8-bit precision is usually enough for sRGB values. For Linear-sRGB on non-color data, additional precision may be required.">
+            Precision
+            <select disabled>
+              <option selected>8-bit (u8)</option>
+              <option>16-bit (f16)</option>
+              <option>32-bit (f32)</option>
+            </select>
+          </label>
+          <label data-tippy-content="Whether to compress the KTX2 output with Zstandard.">
+            Compression
+            <select disabled>
+              <option selected>None</option>
+              <option>ZSTD</option>
+            </select>
+          </label>
+          <label data-tippy-content="Assigns OETF and Primaries to the KTX2 output. No conversion is applied — input LUTs do not contain color space information, so the selected color space is simply declared in the KTX2 file.">
+            Assign Color Space
+            <select disabled>
+              <option>Unspecified</option>
+              <option selected>Linear-sRGB (sRGB-Linear-D65)</option>
+              <option>sRGB (sRGB-Rec709-D65)</option>
+            </select>
+          </label>
+        </form>
+
+        <!-- Instructions -->
+        <section>
+          <h2>
+            Using this converter
+          </h2>
+          <p>
+            Drop 1D or 3D Lookup Tables (LUTs), in .cube format, in the box above.
+            Each input LUT will be converted to a 1D or 3D texture, in
+            <a href="https://github.khronos.org/KTX-Specification/" target="_blank">KTX 2.0</a>
+            (.ktx2) format. These textures are typically smaller files,
+            will be parsed more quickly, and can be uploaded to the GPU
+            at runtime without expensive pixel-by-pixel processing.
+          </p>
+          <p>
+            For reference, headers
+            from supported 1D and 3D LUT inputs should look like the samples below:
+          </p>
+          <pre><code>LUT_1D_SIZE 4096
+0.000000 0.000000 0.000000
+0.000014 0.000014 0.000014
+0.000027 0.000027 0.000027
+...</code></pre>
+          <pre><code>LUT_3D_SIZE 65
+0.000176 0.000176 0.000176
+0.015625 0.000176 0.000176
+0.031250 0.000176 0.000176
+...</code></pre>
+
+          <p>
+            If LUTs specify domains min/max, that information is not included in output files.
+            No files are uploaded or stored by this tool.
+          </p>
+        </section>
+
+      </main>
+    </div>
+
+    <footer class="footer">
+      <div class="links">
+        Made by <a href="https://www.donmccurdy.com/" target="_blank">Don McCurdy</a>, with
+        <a href="https://threejs.org/" target="_blank">three.js</a> and
+        <a href="https://github.com/donmccurdy/KTX-Parse" target="_blank">ktx-parse</a>
+      </div>
+    </footer>
+  </body>
+</html>
